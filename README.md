@@ -26,6 +26,9 @@ Er sambærileg niðurstaða að þjálfa íslenskt-þýskt líkan og að púsla 
 Notum beinagrind úr heimaverkefni 6 sem control til samanburðar.
 
 # Utils
+Áhugaverðar síður:
+https://opus.nlpl.eu/
+
 
 Áhugaverð model til athugunar:
 
