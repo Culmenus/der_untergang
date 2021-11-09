@@ -1,14 +1,21 @@
+import os
 from io import open
 from datasets import Dataset
 from datasets import DatasetDict
 
+cur_path = os.path.dirname(__file__)
+print(__file__)
+
+ccmatrix_path = os.path.relpath('data/de-is.bitextf.tsv', cur_path)
+tatoeba_path = os.path.relpath('data/de-is_tatoeba.tsv', cur_path)
+
 lang1 = "de"
 lang2 = "is"
 
-lines = open('%s-%s.bitextf.tsv' % (lang1, lang2), encoding='utf-8').\
+lines = open(ccmatrix_path, encoding='utf-8').\
         read().strip().split('\n')
 
-lines2 = open('Sentence pairs in Icelandic-German - 2021-11-08.tsv', encoding='utf-8').\
+lines2 = open(tatoeba_path, encoding='utf-8').\
          read().strip().split('\n')
 
 tatoebaDict = { 'id': [], 'translation': [] }
