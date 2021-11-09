@@ -1,3 +1,4 @@
 data/**/*.txt
 data/**/*.json
 data/**/*.tsv
+data/**/*.parquet
