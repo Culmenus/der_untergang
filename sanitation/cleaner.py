@@ -3,42 +3,36 @@ from io import open
 from datasets import Dataset
 from datasets import DatasetDict
 
-cur_path = os.path.dirname(__file__)
-print(__file__)
+def getData():
+    ccmatrix_path = os.path.relpath('data/de-is.bitextf.tsv')
+    tatoeba_path = os.path.relpath('data/de-is_tatoeba.tsv')
 
-ccmatrix_path = os.path.relpath('data/de-is.bitextf.tsv', cur_path)
-tatoeba_path = os.path.relpath('data/de-is_tatoeba.tsv', cur_path)
+    lines = open(ccmatrix_path, encoding='utf-8').\
+            read().strip().split('\n')
 
-lang1 = "de"
-lang2 = "is"
+    lines2 = open(tatoeba_path, encoding='utf-8').\
+            read().strip().split('\n')
 
-lines = open(ccmatrix_path, encoding='utf-8').\
-        read().strip().split('\n')
+    tatoebaDict = { 'id': [], 'translation': [] }
 
-lines2 = open(tatoeba_path, encoding='utf-8').\
-         read().strip().split('\n')
+    for i in range(len(lines2)):
+        lines2[i] = lines2[i].split('\t')
+        tatoebaDict['id'].append(i)
+        tatoebaDict['translation'].append({ 'de': lines2[i][3], 'is': lines2[i][1]})
+        
+    ccmatrixDict = { 'id': [], 'translation': [] }
 
-tatoebaDict = { 'id': [], 'translation': [] }
+    for i in range(len(lines)):
+        lines[i] = lines[i].split('\t')
+        ccmatrixDict['id'].append(i)
+        ccmatrixDict['translation'].append({ 'de': lines[i][2], 'is': lines[i][1] })
 
-for i in range(len(lines2)):
-    lines2[i] = lines2[i].split('\t')
-    tatoebaDict['id'].append(i)
-    tatoebaDict['translation'].append({ 'de': lines2[i][3], 'is': lines2[i][1]})
-    
-ccmatrixDict = { 'id': [], 'translation': [] }
+    tatoebaDataset = Dataset.from_dict(tatoebaDict)
 
-for i in range(len(lines)):
-    lines[i] = lines[i].split('\t')
-    ccmatrixDict['id'].append(i)
-    ccmatrixDict['translation'].append({ 'de': lines[i][2], 'is': lines[i][1] })
+    ccmatrixDataset = Dataset.from_dict(ccmatrixDict)
 
-tatoebaDataset = Dataset.from_dict(tatoebaDict)
+    tatoebaData = DatasetDict({'train': tatoebaDataset})
 
-ccmatrixDataset = Dataset.from_dict(ccmatrixDict)
+    ccmatrixData = DatasetDict({'train': ccmatrixDataset})
 
-tatoebaData = DatasetDict({'train': tatoebaDataset})
-
-ccmatrixData = DatasetDict({'train': ccmatrixDataset})
-
-print(tatoebaData)
-print(ccmatrixData)
+    return tatoebaData, ccmatrixData
