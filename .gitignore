@@ -1,4 +1,4 @@
-data/**/*.txt
-data/**/*.json
-data/**/*.tsv
-data/**/*.parquet
+**/*.txt
+**/*.json
+**/*.tsv
+**/*.parquet
