@@ -1,7 +1,9 @@
 import os
 from io import open
+import re
 from datasets import Dataset
 from datasets import DatasetDict
+from datasets import load_dataset
 
 def getData():
     ccmatrix_path = os.path.relpath('data/de-is.bitextf.tsv')
@@ -25,7 +27,7 @@ def getData():
     for i in range(len(lines)):
         lines[i] = lines[i].split('\t')
         ccmatrixDict['id'].append(i)
-        ccmatrixDict['translation'].append({ 'de': lines[i][2], 'is': lines[i][1] })
+        ccmatrixDict['translation'].append({ 'de': lines[i][1], 'is': lines[i][2] })
 
     tatoebaDataset = Dataset.from_dict(tatoebaDict)
 
@@ -37,3 +39,21 @@ def getData():
 
     return tatoebaData, ccmatrixData
 
+tatoeba, test = getData()
+
+print(test)
+print(tatoeba)
+
+dataset_tab = load_dataset('parquet', data_files='../data/tilde_model.parquet')
+
+print(dataset_tab['train'])
+
+print(dataset_tab)
+
+def yeetsofthyphen(dataset):
+    dataset['translation'] = {'de': re.sub(r"\xad", "", dataset['translation']['de']), 'is': dataset['translation']['is']}
+    return dataset
+
+dataset_tab['train'] = dataset_tab['train'].map(yeetsofthyphen)
+
+print(dataset_tab['train'][100])
