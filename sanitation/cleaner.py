@@ -44,16 +44,24 @@ tatoeba, test = getData()
 print(test)
 print(tatoeba)
 
-dataset_tab = load_dataset('parquet', data_files='../data/tilde_model.parquet')
+dataset_tilde = load_dataset('parquet', data_files='../data/tilde_model.parquet')
 
-print(dataset_tab['train'])
+print(dataset_tilde['train'])
 
-print(dataset_tab)
+print(dataset_tilde)
 
 def yeetsofthyphen(dataset):
     dataset['translation'] = {'de': re.sub(r"\xad", "", dataset['translation']['de']), 'is': dataset['translation']['is']}
     return dataset
 
-dataset_tab['train'] = dataset_tab['train'].map(yeetsofthyphen)
+dataset_tilde['train'] = dataset_tilde['train'].map(yeetsofthyphen)
 
-print(dataset_tab['train'][100])
+print(dataset_tilde['train'][100])
+print(test['train'][1])
+print(tatoeba['train'][1])
+
+dataset_tilde['train'].to_parquet('data/processed_data/tilde_dataset.parquet')
+
+tatoeba['train'].to_parquet('data/processed_data/tatoeba_dataset.parquet')
+
+test['train'].to_parquet('data/processed_data/ccmatrix_dataset.parquet')
